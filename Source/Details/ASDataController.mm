@@ -568,13 +568,13 @@ typedef void (^ASDataControllerSynchronizationBlock)();
     os_log_debug(ASCollectionLog(), "performBatchUpdates %@ %@", ASViewToDisplayNode(ASDynamicCast(self.dataSource, UIView)), changeSet);
   }
 
-  if (!ASActivateExperimentalFeature(ASExperimentalOptimizeDataControllerPipeline)) {
-    NSTimeInterval transactionQueueFlushDuration = 0.0f;
-    {
-      AS::ScopeTimer t(transactionQueueFlushDuration);
-      dispatch_group_wait(_editingTransactionGroup, DISPATCH_TIME_FOREVER);
-    }
-  }
+//  if (!ASActivateExperimentalFeature(ASExperimentalOptimizeDataControllerPipeline)) {
+//    NSTimeInterval transactionQueueFlushDuration = 0.0f;
+//    {
+//      AS::ScopeTimer t(transactionQueueFlushDuration);
+//      dispatch_group_wait(_editingTransactionGroup, DISPATCH_TIME_FOREVER);
+//    }
+//  }
 
   // If the initial reloadData has not been called, just bail because we don't have our old data source counts.
   // See ASUICollectionViewTests.testThatIssuingAnUpdateBeforeInitialReloadIsUnacceptable
@@ -971,7 +971,7 @@ typedef void (^ASDataControllerSynchronizationBlock)();
 {
   ASDisplayNodeAssertMainThread();
   dispatch_group_notify(_editingTransactionGroup, dispatch_get_main_queue(), ^{
-    [_mainSerialQueue performBlockOnMainThread:block];
+    [self->_mainSerialQueue performBlockOnMainThread:block];
   });
 }
 
